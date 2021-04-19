@@ -62,6 +62,10 @@ class RingBuffer {
     // The channel count of arraySequence and the length of each channel must
     // match with this buffer obejct.
 
+    if (arraySequence.length !== this._channelCount) {
+      return;
+    }
+
     // Transfer data from the |arraySequence| storage to the internal buffer.
     let sourceLength = arraySequence[0] ? arraySequence[0].length : 0;
     for (let i = 0; i < sourceLength; ++i) {

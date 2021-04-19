@@ -81,7 +81,7 @@ const ac = p5sound.audiocontext;
  *  </div></code>
  */
 class SoundRecorder {
-  constructor() {
+  constructor(options) {
     this.input = ac.createGain();
     this.output = ac.createGain();
 
@@ -104,11 +104,8 @@ class SoundRecorder {
 
     this._workletNode.port.onmessage = function (event) {
       if (event.data.name === 'buffers') {
-        const buffers = [
-          new Float32Array(event.data.leftBuffer),
-          new Float32Array(event.data.rightBuffer),
-        ];
-        this._callback(buffers);
+        options.callback(event.data.leftBuffer, event.data.duration);
+        // options.callback(buffers, )
       }
     }.bind(this);
 

@@ -29,7 +29,7 @@ class RecorderProcessor extends AudioWorkletProcessor {
       return true;
     } else if (this.sampleLimit && this.recordedSamples >= this.sampleLimit) {
       this.stop();
-      return true;
+      // return true;
     }
 
     const input = inputs[0];
@@ -66,12 +66,18 @@ class RecorderProcessor extends AudioWorkletProcessor {
   }
 
   stop() {
-    this.recording = false;
+    // this.recording = false;
     const buffers = this.getBuffers();
     const leftBuffer = buffers[0].buffer;
     const rightBuffer = buffers[1].buffer;
+    const duration = this.recordedSamples / sampleRate;
     this.port.postMessage(
-      { name: 'buffers', leftBuffer: leftBuffer, rightBuffer: rightBuffer },
+      {
+        name: 'buffers',
+        leftBuffer: leftBuffer,
+        rightBuffer: rightBuffer,
+        duration: duration,
+      },
       [leftBuffer, rightBuffer]
     );
     this.clear();
@@ -107,7 +113,7 @@ class RecorderProcessor extends AudioWorkletProcessor {
       .fill(null)
       .map(() => new Float32Array(this.bufferSize));
     this.recordedSamples = 0;
-    this.sampleLimit = null;
+    // this.sampleLimit = null;
   }
 }
 
