@@ -136,7 +136,9 @@ class AudioIn {
     var constraints = {
       audio: {
         sampleRate: p5sound.audiocontext.sampleRate,
-        echoCancellation: false,
+        echoCancellation: true,
+        noiseSuppression: true,
+        autoGainControl: true,
       },
     };
 
