@@ -132,15 +132,26 @@ class AudioIn {
     }
 
     // set the audio source
-    var audioSource = p5sound.inputSources[self.currentSource];
-    var constraints = {
+    let audioSource = p5sound.inputSources[self.currentSource];
+    // default:
+    let constraints = {
       audio: {
         sampleRate: p5sound.audiocontext.sampleRate,
-        echoCancellation: true,
-        noiseSuppression: true,
-        autoGainControl: true,
+        echoCancellation: false,
       },
     };
+
+    let ua = navigator.userAgent.toLowerCase();
+    let isChromeAndroid = (ua.indexOf("android") > -1) && (ua.indexOf("chrome") > -1);
+    if (isChromeAndroid) {
+      constraints = {
+        audio: {
+          sampleRate: p5sound.audiocontext.sampleRate,
+          echoCancellation: true,
+          autoGainControl: true,
+        },
+      };
+    }
 
     // if developers determine which source to use
     if (p5sound.inputSources[this.currentSource]) {
