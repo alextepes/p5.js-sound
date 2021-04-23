@@ -28,7 +28,7 @@ class RecorderProcessor extends AudioWorkletProcessor {
     if (!this.recording) {
       return true;
     } else if (this.sampleLimit && this.recordedSamples >= this.sampleLimit) {
-      this.stop();
+      this.continue();
       // return true;
     }
 
@@ -65,8 +65,25 @@ class RecorderProcessor extends AudioWorkletProcessor {
     this.recording = true;
   }
 
+  continue() {
+    const buffers = this.getBuffers();
+    const leftBuffer = buffers[0].buffer;
+    const rightBuffer = buffers[1].buffer;
+    const duration = this.recordedSamples / sampleRate;
+    this.port.postMessage(
+      {
+        name: 'buffers',
+        leftBuffer: leftBuffer,
+        rightBuffer: rightBuffer,
+        duration: duration,
+      },
+      [leftBuffer, rightBuffer]
+    );
+    this.clear();
+  }
+
   stop() {
-    // this.recording = false;
+    this.recording = false;
     const buffers = this.getBuffers();
     const leftBuffer = buffers[0].buffer;
     const rightBuffer = buffers[1].buffer;

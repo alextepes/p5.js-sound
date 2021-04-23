@@ -137,12 +137,13 @@ class AudioIn {
     let constraints = {
       audio: {
         sampleRate: p5sound.audiocontext.sampleRate,
-        echoCancellation: false,
+        echoCancellation: true,
       },
     };
 
     let ua = navigator.userAgent.toLowerCase();
-    let isChromeAndroid = (ua.indexOf("android") > -1) && (ua.indexOf("chrome") > -1);
+    let isChromeAndroid =
+      ua.indexOf('android') > -1 && ua.indexOf('chrome') > -1;
     if (isChromeAndroid) {
       constraints = {
         audio: {
