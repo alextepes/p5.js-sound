@@ -134,23 +134,24 @@ class AudioIn {
     // set the audio source
     let audioSource = p5sound.inputSources[self.currentSource];
     // default:
+    const ua = navigator.userAgent.toLowerCase();
+    const isSafariIos = ua.indexOf('iphone') > -1 && ua.indexOf('safari') > -1;
+    const isUsingWorkletsPolyfill =
+      isSafariIos ||
+      typeof AudioWorkletNode !== 'function' ||
+      !('audioWorklet' in AudioContext.prototype);
+
     let constraints = {
       audio: {
         sampleRate: p5sound.audiocontext.sampleRate,
         echoCancellation: true,
+        autoGainControl: true,
       },
     };
 
-    let ua = navigator.userAgent.toLowerCase();
-    let isChromeAndroid =
-      ua.indexOf('android') > -1 && ua.indexOf('chrome') > -1;
-    if (isChromeAndroid) {
+    if (isUsingWorkletsPolyfill) {
       constraints = {
-        audio: {
-          sampleRate: p5sound.audiocontext.sampleRate,
-          echoCancellation: true,
-          autoGainControl: true,
-        },
+        audio: true,
       };
     }
 
@@ -158,11 +159,16 @@ class AudioIn {
     if (p5sound.inputSources[this.currentSource]) {
       constraints.audio.deviceId = audioSource.deviceId;
     }
+    console.log(constraints);
 
     window.navigator.mediaDevices
       .getUserMedia(constraints)
       .then(function (stream) {
         self.stream = stream;
+        console.log(stream.getTracks()[0].getCapabilities());
+        console.log(stream.getTracks()[0].getConstraints());
+        console.log(stream.getTracks()[0].getSettings());
+
         self.enabled = true;
         // Wrap a MediaStreamSourceNode around the live input
         self.mediaStream = p5sound.audiocontext.createMediaStreamSource(stream);

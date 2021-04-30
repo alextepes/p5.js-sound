@@ -312,6 +312,12 @@ function writeUTFBytes(view, offset, string) {
 }
 
 function safeBufferSize(idealBufferSize) {
+  const ua = navigator.userAgent.toLowerCase();
+  const isSafariIos = ua.indexOf('iphone') > -1 && ua.indexOf('safari') > -1;
+  if (isSafariIos) {
+    return 1024;
+  }
+  // return 512;
   let bufferSize = idealBufferSize;
 
   // if the AudioWorkletNode is actually a ScriptProcessorNode created via polyfill,
