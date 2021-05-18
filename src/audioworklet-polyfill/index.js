@@ -20,7 +20,10 @@ const PARAMS = [];
 let nextPort;
 const ua = navigator.userAgent.toLowerCase();
 const isSafariIos = ua.indexOf('iphone') > -1 && ua.indexOf('safari') > -1;
-const isUsingWorkletsPolyfill = isSafariIos || typeof AudioWorkletNode !== 'function' || !('audioWorklet' in AudioContext.prototype);
+const isUsingWorkletsPolyfill =
+  isSafariIos ||
+  typeof AudioWorkletNode !== 'function' ||
+  !('audioWorklet' in AudioContext.prototype);
 
 if (isUsingWorkletsPolyfill) {
   self.AudioWorkletNode = function AudioWorkletNode(context, name, options) {
