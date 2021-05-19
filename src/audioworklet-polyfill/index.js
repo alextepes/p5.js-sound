@@ -114,8 +114,7 @@ function onAudioProcess(e) {
   const parameters = {};
   let index = -1;
   this.parameters.forEach((value, key) => {
-    const arr =
-      PARAMS[++index] || (PARAMS[index] = new Float32Array(1024));
+    const arr = PARAMS[++index] || (PARAMS[index] = new Float32Array(1024));
     // @TODO proper values here if possible
     arr.fill(value.value);
     parameters[key] = arr;
@@ -130,6 +129,11 @@ function onAudioProcess(e) {
   const inputs = channelToArray(e.inputBuffer);
   const outputs = channelToArray(e.outputBuffer);
   this.instance.process([inputs], [outputs], parameters);
+  for (let i = 0; i < outputs.length; i++) {
+    for (let j = 0; j < outputs[i].length; j++) {
+      outputs[i][j] = 0;
+    }
+  }
 
   // @todo - keepalive
   // let ret = this.instance.process([inputs], [outputs], parameters);

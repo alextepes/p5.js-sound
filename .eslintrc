@@ -19,12 +19,6 @@
     "prettier/prettier": ["error"],
     "no-cond-assign": [2, "except-parens"],
     "eqeqeq": ["error", "smart"],
-    "no-use-before-define": [
-      2,
-      {
-        "functions": false
-      }
-    ],
     "new-cap": 0,
     "no-caller": 2,
     "no-undef": 0,
